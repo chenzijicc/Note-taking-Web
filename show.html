@@ -16,9 +16,10 @@
             overflow-x: hidden;
         }
         #content{
-            margin-top: 88.5%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            /*//margin-top: 88.5%;*/
+            /*//left: 50%;*/
+            /*//transform: translate(-50%, -50%);*/
+             opacity: 0.9;
         }
         pre{
             margin: 0;
@@ -29,7 +30,6 @@
 <body>
 
 <canvas id="mom" style="background:#111;position: absolute;z-index: 5"></canvas>
-<div id="gapsda" style="height: 10%;width: 80%;position: absolute;z-index: 100">6</div>
 <div id="content" style="position: absolute;z-index: 100;width: 80%"></div>
 
 
@@ -45,9 +45,8 @@
         var W = window.innerWidth;
         var H= 1500
         var preH =$("#content").find("pre").height()
-        var gapsda =$("#gapsda").height()
-        if(preH+gapsda>window.innerHeight){
-            H=preH+gapsda
+        if(preH>window.innerHeight){
+            H=preH
         }else{
             H=window.innerHeight
         }
