@@ -30,9 +30,11 @@
     </style>
     <script src="js/jquery.ztree.all.min.js"></script>
     <link rel="stylesheet" href="css/zTreeStyle.css">
+    <script src="js/fuzzysearch.js"></script>
 </head>
 <body>
     <div class="lefttrre">
+        <input type="text" id="key" value="" class="empty" placeholder="请输入关键字"/>
         <ul id="treeDemo" class="ztree"></ul>
     </div>
     <div class="righttable">
@@ -41,25 +43,57 @@
 
 
     <script>
-
+        var ddd={
+            cols: [
+                {name: 'time', label: '创建日期', width: 132},
+                {name: 'hero', label: '文章标题', width: 234},
+                {name: 'action', label: '动作', width: 109}
+            ],
+            array: [
+                {time: '00:11:12', hero: '幻影刺客', action: '击杀', target: '斧王', desc: '幻影刺客击杀了斧王。',url:"https://www.baidu.com"},
+                {time: '00:13:22', hero: '幻影刺客', action: '购买了', target: '隐刀', desc: '幻影刺客购买了隐刀。',url:"https://www.jd.com"}
+            ]
+        }
         var setting = {
+            check: {
+                enable: false//checkbox
+            },
+            view: {
+                nameIsHTML: true, //允许name支持html
+                selectedMulti: false
+            },
+            edit: {
+                enable: false,
+                editNameSelectAll: false
+            },
             data: {
                 simpleData: {
                     enable: true
+                }
+            },
+            callback:{
+                onClick:function (event, treeId, treeNode) {
+                    if(treeNode.name){
+                        var myDataGrid = $('#datagridExample').data('zui.datagrid');
+                        myDataGrid.renderLoading(true);
+                        myDataGrid.setDataSource(ddd)
+                        myDataGrid.gotoPage(1)
+                        myDataGrid.renderLoading(false);
+                    }
                 }
             }
         };
 
         var zNodes =[
-            { id:1, pId:0, name:"展开、折叠 自定义图标不同", open:true, iconOpen:"img/diy/1_open.png", iconClose:"img/diy/1_close.png"},
-            { id:11, pId:1, name:"叶子节点1", icon:"img/diy/2.png"},
-            { id:12, pId:1, name:"叶子节点2", icon:"img/diy/3.png"},
-            { id:13, pId:1, name:"叶子节点3", icon:"img/diy/5.png"},
-            { id:2, pId:0, name:"展开、折叠 自定义图标相同", open:true, icon:"img/diy/4.png"},
+            { id:1, pId:0, name:"全部文章", open:true, icon:"img/diy/2.png"}, //iconClose:"img/diy/1_close.png"
+            { id:11, pId:1, name:"Java", icon:"img/diy/2.png"},
+            { id:12, pId:1, name:"HTML", icon:"img/diy/2.png"},
+            { id:13, pId:1, name:"JAVAFX", icon:"img/diy/2.png"},
+            { id:2, pId:0, name:"全部开发软件", open:true, icon:"img/diy/1_open.png"},
             { id:21, pId:2, name:"叶子节点1", icon:"img/diy/6.png"},
             { id:22, pId:2, name:"叶子节点2", icon:"img/diy/7.png"},
             { id:23, pId:2, name:"叶子节点3", icon:"img/diy/8.png"},
-            { id:3, pId:0, name:"不使用自定义图标", open:true },
+            { id:3, pId:0, name:"全部系统镜像", open:true, icon:"img/diy/1_open.png" },
             { id:31, pId:3, name:"叶子节点1"},
             { id:32, pId:3, name:"叶子节点2"},
             { id:33, pId:3, name:"叶子节点3"}
@@ -68,7 +102,9 @@
 
         $(function () {
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            fuzzySearch('treeDemo','#key',null,true); //初始化模糊搜索方法
            var height= document.documentElement.clientHeight
+
             $('#datagridExample').datagrid({
                 height:height,
                 configs: {
@@ -97,6 +133,10 @@
                         {time: '00:21:43', hero: '力丸', action: '购买了', target: '隐刀', desc: '力丸购买了隐刀。'}
                     ]
                 },
+                onClickCell: function(event, cell, $cell) {
+                    var row=cell.config.data
+                    window.open(row.url)
+                }
                 // ... 其他初始化选项
             });
         })
