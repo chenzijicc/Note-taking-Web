@@ -76,11 +76,30 @@
             callback:{
                 onClick:function (event, treeId, treeNode) {
                     if(treeNode.name){
-                        var myDataGrid = $('#datagridExample').data('zui.datagrid');
-                        myDataGrid.renderLoading(true);
-                        myDataGrid.setDataSource(ddd)
-                        myDataGrid.gotoPage(1)
-                        myDataGrid.renderLoading(false);
+
+                        $.get("data/books.json",{},function (data) {
+
+                            if(treeNode.name=="全部文章"){
+                                ddd.array=data
+                                var myDataGrid = $('#datagridExample').data('zui.datagrid');
+                                myDataGrid.renderLoading(true);
+                                myDataGrid.setDataSource(ddd)
+                                myDataGrid.gotoPage(0)
+                                myDataGrid.renderLoading(false);
+                            }else{
+                                ddd.array=[]
+                                $.each(data,function (i,n) {
+                                    if(n.type== treeNode.name.toLowerCase()){
+                                        ddd.array.push(n)
+                                    }
+                                })
+                                var myDataGrid = $('#datagridExample').data('zui.datagrid');
+                                myDataGrid.renderLoading(true);
+                                myDataGrid.setDataSource(ddd)
+                                myDataGrid.gotoPage(1)
+                                myDataGrid.renderLoading(false);
+                            }
+                        })
                     }
                 }
             }
@@ -129,8 +148,6 @@
                     fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             return fmt;
         }
-
-
 
         $(function () {
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
