@@ -1,5 +1,5 @@
 #### java 连接com
-[jar包](http://chenziji.top/upload/2022/11/mfz-rxtx-2.2-20081207-win-x64.zip)
+[jar包](static/mfz-rxtx-2.2-20081207-win-x64.zip)
 ```java
 package com.fz;
 
