@@ -38,7 +38,16 @@
         <ul id="treeDemo" class="ztree"></ul>
     </div>
     <div class="righttable">
-        <div id="datagridExample" class="datagrid"></div>
+        <div id="datagridExample" class="datagrid">
+            <a id="addBM" class="btn btn-primary" href="javascript:;" style="position: relative;top: 10px;left: 30px;display: none;">新增</a>
+            <div class="input-control search-box search-box-circle has-icon-left has-icon-right" id="searchboxExample" style="margin: 10px; max-width: 300px;float: right">
+                <input id="inputSearchExample" type="search" class="form-control" autocomplete='off' placeholder="搜索">
+                <label for="inputSearchExample" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a href="#" class="input-control-icon-right search-clear-btn"><i class="icon icon-remove"></i></a>
+            </div>
+            <div class="datagrid-container"></div>
+            <div id="myPager" class="pager pagerCSS" menu-direction="dropup" data-ride="pager" data-elements = "first_icon,prev_icon,pages,next_icon,last_icon,page_of_total_text,items_range_text,total_text,size_menu"  data-lang = "zh_cn"></div>
+        </div>
     </div>
     <div style="position: absolute;right: 0px;bottom: 10px;width: 10%;height: 10%;display: flex;justify-items: center;align-items: center">
         <div id="time" style="font-weight: bolder" class="README"></div>
@@ -84,7 +93,7 @@
                                 var myDataGrid = $('#datagridExample').data('zui.datagrid');
                                 myDataGrid.renderLoading(true);
                                 myDataGrid.setDataSource(ddd)
-                                myDataGrid.gotoPage(0)
+                                myDataGrid.gotoPage(1)
                                 myDataGrid.renderLoading(false);
                             }else{
                                 ddd.array=[]
@@ -111,13 +120,14 @@
             { id:12, pId:1, name:"HTML", icon:"img/diy/2.png"},
             { id:13, pId:1, name:"JAVAFX", icon:"img/diy/2.png"},
             { id:2, pId:0, name:"全部开发软件", open:true, icon:"img/diy/1_open.png"},
-            { id:21, pId:2, name:"叶子节点1", icon:"img/diy/6.png"},
-            { id:22, pId:2, name:"叶子节点2", icon:"img/diy/7.png"},
-            { id:23, pId:2, name:"叶子节点3", icon:"img/diy/8.png"},
+            { id:21, pId:2, name:"Java", icon:"img/diy/6.png"},
+            { id:22, pId:2, name:"C", icon:"img/diy/7.png"},
+            { id:23, pId:2, name:"C#", icon:"img/diy/8.png"},
+            { id:23, pId:2, name:"数据库", icon:"img/diy/8.png"},
             { id:3, pId:0, name:"全部系统镜像", open:true, icon:"img/diy/1_open.png" },
-            { id:31, pId:3, name:"叶子节点1"},
-            { id:32, pId:3, name:"叶子节点2"},
-            { id:33, pId:3, name:"叶子节点3"}
+            { id:31, pId:3, name:"Windows"},
+            { id:32, pId:3, name:"Linux"},
+            { id:33, pId:3, name:"其它"}
 
         ];
 
@@ -152,7 +162,7 @@
         $(function () {
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
             fuzzySearch('treeDemo','#key',null,true); //初始化模糊搜索方法
-           var height= document.documentElement.clientHeight
+           var height= document.documentElement.clientHeight-80
 
             $.get("data/books.json",{},function (data) {
                 $('#datagridExample').datagrid({
@@ -179,6 +189,9 @@
                         ],
                         array: data
                     },
+                    states: {
+                        pager: {page: 1, recPerPage: 20}
+                    },
                     onClickCell: function(event, cell, $cell) {
                         var row=cell.config.data
                         window.open("show.html?page="+row.url)
@@ -197,6 +210,16 @@
                 window.open("show.html?page=README.md")
 
             })
+
+            $('#myPager').on('onPageChange', function(e, state, oldState) {
+                if (state.page !== oldState.page) {
+                    console.log('页码从', oldState.page, '变更为', state.page);
+                    var myDataGrid = $('#datagridExample').data('zui.datagrid');
+                    myDataGrid.renderLoading(true);
+                    myDataGrid.gotoPage(state.page)
+                    myDataGrid.renderLoading(false);
+                }
+            });
         })
     </script>
 </body>

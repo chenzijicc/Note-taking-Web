@@ -28,7 +28,7 @@ ipv6:	2400:da00::6666
 ```
 
 中国电信DNS：https://dns.jiayongluyou.com/dx/38.html
-```
+```txt
 ipv4: 标题链接
 ipv6:	240e:4c:4008::1
 		240e:4c:4808::1
